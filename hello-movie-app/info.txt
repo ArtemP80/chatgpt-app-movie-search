@@ -1,0 +1,29 @@
+npm init -y
+npm install express cors dotenv @modelcontextprotocol/sdk
+
+mcp inspector
+npx @modelcontextprotocol/inspector
+
+
+http://localhost:4000/mcp
+
+=====
+
+
+PS C:\JB\Projects\Poort80\GptApp\hello-movie-app\server> npm start
+
+> hello-movie-server@1.0.0 start
+> node server.js
+
+file:///C:/JB/Projects/Poort80/GptApp/hello-movie-app/server/server.js:4
+import { MCPServer } from "@modelcontextprotocol/sdk/server";
+         ^^^^^^^^^
+SyntaxError: The requested module '@modelcontextprotocol/sdk/server' does not provide an export named 'MCPServer'       
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:123:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:191:5)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+Node.js v18.20.8
+PS C:\JB\Projects\Poort80\GptApp\hello-movie-app\server> 

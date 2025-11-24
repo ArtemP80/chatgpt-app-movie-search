@@ -1,0 +1,44 @@
+{
+  "id": "com.mycompany.hello-movie-app",
+  "version": "0.1.0",
+  "name": "Hello Movie Finder",
+  "description": "Find movies playing tonight in your city",
+  "tools": [
+    {
+      "id": "find_movies",
+      "title": "Find Movies Tool",
+      "description": "Get list of movies playing tonight",
+      "endpoint": "http://localhost:3000/mcp",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string" },
+          "date": { "type": "string", "format": "date" }
+        },
+        "required": ["city","date"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string" },
+          "date": { "type": "string" },
+          "movies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "time": { "type": "string" }
+              },
+              "required": ["title","time"]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "ui": {
+    "entry": "http://localhost:3000/ui/movieCard.html"
+  }
+}

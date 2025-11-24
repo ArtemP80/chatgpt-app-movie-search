@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies Tonight</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Movies Tonight</h1>
+  <label>City: <input type="text" id="city" value="Amsterdam"></label>
+  <label>Date: <input type="date" id="date" value="2025-11-04"></label>
+  <button id="fetchBtn">Get Movies</button>
+
+  <div id="root" style="margin-top: 20px;"></div>
+
+  <script>
+    async function fetchMovies() {
+      const city = document.getElementById('city').value;
+      const date = document.getElementById('date').value;
+
+      const body = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: {
+          name: "getMovies",
+          arguments: { city, date }
+        }
+      };
+
+      try {
+        const res = await fetch("http://localhost:3000/mcp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json,text/event-stream"
+          },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          document.getElementById('root').innerText = `Error: ${data.error.message}`;
+          return;
+        }
+
+        // Now matches your getMovies output
+        const resultText = data.result.structuredContent.result;
+        document.getElementById('root').innerText = resultText;
+
+      } catch (err) {
+        document.getElementById('root').innerText = `Fetch error: ${err.message}`;
+      }
+    }
+
+    document.getElementById('fetchBtn').addEventListener('click', fetchMovies);
+  </script>
+</body>
+</html>

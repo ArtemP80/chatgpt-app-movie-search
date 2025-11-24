@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies Tonight</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 10px; }
+    .movie { margin-bottom: 8px; }
+    .movie-title { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    // This component runs inside ChatGPT widget iframe
+    const props = window.openai?.toolOutput?.structuredContent;
+    if (!props) {
+      document.getElementById('root').innerText = "Loading…";
+    } else {
+      const { city, date, movies } = props;
+      const root = document.getElementById('root');
+      root.innerHTML = `<h2>Movies playing in ${city} on ${date}</h2>`;
+      movies.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'movie';
+        div.innerHTML = `<span class="movie-title">${m.title}</span> at <span>${m.time}</span>`;
+        root.append(div);
+      });
+    }
+    // optional: add button to ask for ticket booking
+    function askBooking(movieTitle) {
+      window.openai?.sendFollowUpMessage({ prompt: `Book me 2 tickets for ${movieTitle} tonight in ${props.city}`});
+    }
+  </script>
+</body>
+</html>

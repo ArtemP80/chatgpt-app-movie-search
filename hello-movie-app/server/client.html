@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies Tonight</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 10px; }
+    .movie { margin-bottom: 8px; }
+    .movie-title { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    // 🧪 Mock ChatGPT environment so it renders locally
+    window.openai = {
+      toolOutput: {
+        structuredContent: {
+          city: "Amsterdam",
+          date: "2025-11-04",
+          movies: [
+            { title: "Dune: Part Two", time: "18:30" },
+            { title: "Joker: Folie à Deux", time: "20:15" },
+            { title: "Inside Out 2", time: "16:45" }
+          ]
+        }
+      },
+      sendFollowUpMessage: (data) => alert(`Follow-up message: ${data.prompt}`)
+    };
+
+    // 🧩 Now your render logic
+    const props = window.openai?.toolOutput?.structuredContent;
+    const root = document.getElementById('root');
+
+    if (!props) {
+      root.innerText = "Loading…";
+    } else {
+      const { city, date, movies } = props;
+      root.innerHTML = `<h2>Movies playing in ${city} on ${date}</h2>`;
+      movies.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'movie';
+        div.innerHTML = `
+          <span class="movie-title">${m.title}</span> at <span>${m.time}</span>
+          <button onclick="askBooking('${m.title}')">Book</button>
+        `;
+        root.append(div);
+      });
+    }
+
+    // booking example
+    function askBooking(movieTitle) {
+      window.openai?.sendFollowUpMessage({ prompt: `Book me 2 tickets for ${movieTitle}` });
+    }
+  </script>
+</body>
+</html>
